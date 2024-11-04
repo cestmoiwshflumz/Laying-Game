@@ -45,6 +45,8 @@ Ce projet est inspiré du jeu **Laying Grass** tiré de l'émission *The Devil's
 │   ├── Player.h             # Header de la classe Player
 │   ├── Tile.h               # Header de la classe Tile
 │   └── Board.h              # Header de la classe Board
+├── data
+│   └── tiles.json           # Fichier JSON contenant les tuiles
 ├── main.cpp                 # Point d'entrée du programme
 ├── LICENSE                  # license MIT
 ├── README.md                # Ce fichier
