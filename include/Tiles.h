@@ -1,14 +1,25 @@
-//
-// Created by Flumz on 04/11/2024.
-//
+#ifndef TILES_H
+#define TILES_H
 
-#ifndef LAYING_GAME_TILES_H
-#define LAYING_GAME_TILES_H
+#include <vector>
+#include <string>
+#include <iostream>
+#include "../nlohmann/json.hpp" // Inclure la bibliothèque JSON
 
-
-class Tiles {
-
+struct Tile {
+    int id;
+    std::vector<std::vector<int>> shape;  // Forme de la tuile (matrice)
 };
 
+class Tiles {
+public:
+    Tiles(const std::string& filename);  // Constructeur pour charger les tuiles depuis un fichier JSON
+    [[nodiscard]] const Tile& getTile(int index) const; // Accède à une tuile par index
+    int getTotalTiles() const;            // Renvoie le nombre total de tuiles
 
-#endif //LAYING_GAME_TILES_H
+private:
+    std::vector<Tile> tiles;  // Collection de toutes les tuiles
+    void loadTiles(const std::string& filename);  // Méthode pour charger les tuiles depuis JSON
+};
+
+#endif // TILES_H

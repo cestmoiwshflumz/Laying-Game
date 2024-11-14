@@ -9,4 +9,5 @@ add_executable(Laying_Game main.cpp
         src/Board.cpp
         include/Game.h
         src/Game.cpp
-        src/Tiles.cpp)
+        src/Tiles.cpp
+        json.hpp)
