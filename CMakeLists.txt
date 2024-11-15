@@ -10,4 +10,4 @@ add_executable(Laying_Game main.cpp
         include/Game.h
         src/Game.cpp
         src/Tiles.cpp
-        nlohmannL/json.hpp)
+        nlohmann/json.hpp)
