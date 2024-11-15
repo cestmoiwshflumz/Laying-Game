@@ -9,9 +9,8 @@ public:
     Board(int numPlayers);  // Constructeur qui initialise la taille de la grille en fonction du nombre de joueurs
     void display() const;   // Méthode pour afficher le plateau
 
-    // Méthodes pour placer les tuiles et gérer les bonus
-    bool placeTile(int x, int y, const std::vector<std::vector<int>>& tileShape, int playerID);
-    void placeBonus(int x, int y, char bonusType);
+    bool placeTile(int x, int y, const std::vector<std::vector<int>>& tileShape, char playerSymbol); // Place une tuile
+    bool canPlaceTile(int x, int y, const std::vector<std::vector<int>>& tileShape, char playerSymbol); // Vérifie si une tuile peut être placée
 
 private:
     int size;  // Taille du plateau (20x20 ou 30x30)

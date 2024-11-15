@@ -1,22 +1,14 @@
-#include "include/Tiles.h"
+#include <windows.h>
+#include "include/Game.h"
 #include <iostream>
 
 int main() {
-    Tiles tiles("D:/C++/Laying_Game/data/tiles.json");  // Assurez-vous que le chemin est correct
+    SetConsoleOutputCP(CP_UTF8);
 
-    // Affiche le nombre total de tuiles
-    std::cout << "Total de tuiles chargées : " << tiles.getTotalTiles() << std::endl;
+    std::srand(std::time(nullptr)); // Initialiser la graine pour rand()
 
-    // Affiche la première tuile pour vérifier le chargement
-    const Tile& tile = tiles.getTile(0);
-    std::cout << "ID de la première tuile : " << tile.id << std::endl;
-    std::cout << "Forme de la première tuile :" << std::endl;
-    for (const auto& row : tile.shape) {
-        for (int cell : row) {
-            std::cout << (cell ? "#" : " ");
-        }
-        std::cout << "\n";
-    }
+    Game game(2, "../data/tiles.json"); // 2 joueurs, tuiles chargées depuis JSON
+    game.start(); // Lancer le jeu
 
     return 0;
 }

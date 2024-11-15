@@ -1,14 +1,23 @@
-//
-// Created by Flumz on 04/11/2024.
-//
+#ifndef GAME_H
+#define GAME_H
 
-#ifndef LAYING_GAME_GAME_H
-#define LAYING_GAME_GAME_H
-
+#include "Board.h"
+#include "Player.h"
+#include "Tiles.h"
+#include <vector>
 
 class Game {
+public:
+    Game(int numPlayers, const std::string& tileFile); // Initialiser le jeu
+    void start();  // Démarrer le jeu
 
+private:
+    Board board;                // Plateau de jeu
+    Tiles tiles;                // Tuiles
+    std::vector<Player> players; // Joueurs
+    int currentPlayerIndex;     // Index du joueur actuel
+
+    void takeTurn(Player& player);  // Gestion d'un tour
 };
 
-
-#endif //LAYING_GAME_GAME_H
+#endif // GAME_H
