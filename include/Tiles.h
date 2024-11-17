@@ -16,6 +16,9 @@ public:
     Tiles(const std::string& filename);  // Constructeur pour charger les tuiles depuis un fichier JSON
     [[nodiscard]] const Tile& getTile(int index) const; // Accède à une tuile par index
     int getTotalTiles() const;            // Renvoie le nombre total de tuiles
+    std::vector<std::vector<int>> rotateTile(const std::vector<std::vector<int>>& tileShape);
+    std::vector<std::vector<int>> flipTile(const std::vector<std::vector<int>>& tileShape);
+
 
 private:
     std::vector<Tile> tiles;  // Collection de toutes les tuiles

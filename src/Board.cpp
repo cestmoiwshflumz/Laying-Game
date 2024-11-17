@@ -1,4 +1,6 @@
 #include "../include/Board.h"
+#include <random>
+#include <iostream>
 
 Board::Board(int numPlayers) {
     size = (numPlayers <= 4) ? 20 : 30;  // Grille 20x20 pour 2-4 joueurs, 30x30 pour 5-9 joueurs
@@ -6,13 +8,21 @@ Board::Board(int numPlayers) {
 }
 
 void Board::display() const {
-    for (const auto& row : grid) {
-        for (char cell : row) {
-            std::cout << cell << ' ';  // Affiche chaque cellule avec un espace entre elles
-        }
-        std::cout << std::endl;  // Passe à la ligne suivante après chaque rangée
+    // Affiche les indices horizontaux
+    std::cout << "   ";
+    for (int col = 0; col < size; ++col) {
+        std::cout << (col % 10) << ' ';  // Affiche les numéros de colonne
     }
-    std::cout << std::endl;  // Ligne vide pour séparer les affichages
+    std::cout << '\n';
+
+    // Affiche les lignes de la grille avec indices
+    for (int row = 0; row < size; ++row) {
+        std::cout << (row % 10) << "  ";  // Affiche le numéro de la ligne
+        for (char cell : grid[row]) {
+            std::cout << cell << ' ';
+        }
+        std::cout << '\n';
+    }
 }
 
 
@@ -20,29 +30,53 @@ bool Board::canPlaceTile(int x, int y, const std::vector<std::vector<int>>& tile
     int tileHeight = tileShape.size();
     int tileWidth = tileShape[0].size();
 
-    if (x + tileHeight > size || y + tileWidth > size) return false;
+    // Vérifie que la tuile ne dépasse pas les limites de la grille
+    if (x + tileHeight > size || y + tileWidth > size) {
+        std::cout << "Erreur : La tuile dépasse les limites de la grille.\n";
+        return false;
+    }
+
+    bool touchesStartingPoint = false;
 
     for (int i = 0; i < tileHeight; ++i) {
         for (int j = 0; j < tileWidth; ++j) {
             if (tileShape[i][j] == 1) {
-                if (grid[x + i][y + j] != '.') return false;
+                // Vérifie si la case est déjà occupée
+                if (grid[x + i][y + j] != '.') {
+                    std::cout << "Erreur : La case (" << (x + i) << ", " << (y + j) << ") est déjà occupée.\n";
+                    return false;
+                }
 
-                for (int dx = -1; dx <= 1; ++dx) {
-                    for (int dy = -1; dy <= 1; ++dy) {
-                        if (dx == 0 && dy == 0) continue;
-                        int nx = x + i + dx;
-                        int ny = y + j + dy;
-                        if (nx >= 0 && nx < size && ny >= 0 && ny < size) {
-                            if (grid[nx][ny] != '.' && grid[nx][ny] != playerSymbol) return false;
-                        }
+                // Vérifie si cette cellule touche un point de départ du joueur
+                for (const auto& point : startingPoints) {
+                    int startX = point.first;
+                    int startY = point.second;
+
+                    if (grid[startX][startY] == playerSymbol) {
+                        if ((x + i == startX && y + j == startY - 1) ||  // Gauche
+                            (x + i == startX && y + j == startY + 1) ||  // Droite
+                            (x + i == startX - 1 && y + j == startY) ||  // Haut
+                            (x + i == startX + 1 && y + j == startY)) {  // Bas
+                            touchesStartingPoint = true;
+                            }
                     }
                 }
             }
         }
     }
 
-    return true;
+    if (!touchesStartingPoint) {
+        std::cout << "Erreur : La tuile ne touche pas un côté du point de départ du joueur.\n";
+    }
+
+    return touchesStartingPoint;
 }
+
+
+
+
+
+
 
 bool Board::placeTile(int x, int y, const std::vector<std::vector<int>>& tileShape, char playerSymbol) {
     if (!canPlaceTile(x, y, tileShape, playerSymbol)) return false;
@@ -56,3 +90,34 @@ bool Board::placeTile(int x, int y, const std::vector<std::vector<int>>& tileSha
     }
     return true;
 }
+
+void Board::initializeStartingPoints(int numPlayers) {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(0, size - 1); // Limites de la grille
+
+    startingPoints.clear();
+
+    for (int player = 1; player <= numPlayers; ++player) {
+        bool validPoint = false;
+        int x, y;
+
+        // Trouver un point unique aléatoire
+        while (!validPoint) {
+            x = dis(gen); // Ligne
+            y = dis(gen); // Colonne
+
+            // Vérifie que la case est vide
+            if (grid[x][y] == '.') {
+                validPoint = true;
+                grid[x][y] = '0' + player; // Marquer avec le numéro du joueur
+                startingPoints.emplace_back(x, y);
+            }
+        }
+
+        // Afficher le point de départ pour chaque joueur
+        std::cout << "Point de départ du joueur " << player << " : (" << x << ", " << y << ")\n";
+    }
+}
+
+

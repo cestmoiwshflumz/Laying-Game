@@ -17,13 +17,16 @@ Game::Game(int numPlayers, const std::string& tileFile)
 void Game::start() {
     std::cout << "Démarrage du jeu !" << std::endl;
 
-    // Affiche le plateau initial avant le début du jeu
-    std::cout << "Plateau initial :" << std::endl;
+    // Initialiser les points de départ pour les joueurs
+    board.initializeStartingPoints(players.size());
+
+    // Affiche le plateau initial avec les points de départ
+    std::cout << "Plateau initial avec les points de départ :" << std::endl;
+    board.display();
 
     // 9 tours de jeu
     for (int round = 0; round < 9; ++round) {
         std::cout << "=== Tour " << (round + 1) << " ===\n";
-        board.display();
         for (auto& player : players) {
             takeTurn(player);
         }
@@ -37,41 +40,58 @@ void Game::start() {
 }
 
 
+
+
 void Game::takeTurn(Player& player) {
     std::cout << player.getName() << " (" << player.getSymbol() << "), c'est votre tour.\n";
 
     // Génère un nombre aléatoire pour choisir une tuile
     std::uniform_int_distribution<> dis(0, tiles.getTotalTiles() - 1);
-    const Tile& tile = tiles.getTile(dis(gen));
+    Tile tile = tiles.getTile(dis(gen));  // Copie locale de la tuile pour permettre les modifications
 
-    // Affiche la forme de la tuile
-    std::cout << "Forme de la tuile à placer :" << std::endl;
-    for (const auto& row : tile.shape) {
-        for (int cell : row) {
-            std::cout << (cell ? '#' : ' ');
-        }
-        std::cout << std::endl;
-    }
+    char action;
+    bool placing = false;
 
-    int x, y;
-    bool validPlacement = false;
     do {
-        std::cout << "Entrez les coordonnées pour placer la tuile (x y) : ";
-        std::cin >> x >> y;
-
-        if (board.canPlaceTile(x, y, tile.shape, player.getSymbol())) {
-            validPlacement = true;
-        } else {
-            std::cout << "Placement invalide : la tuile touche les cases d'un autre joueur ou dépasse la grille.\n";
+        std::cout << "Forme actuelle de la tuile :" << std::endl;
+        for (const auto& row : tile.shape) {
+            for (int cell : row) {
+                std::cout << (cell ? '#' : ' ');
+            }
+            std::cout << std::endl;
         }
-    } while (!validPlacement);
 
-    // Place la tuile sur le plateau et incrémente le score
-    board.placeTile(x, y, tile.shape, player.getSymbol());
-    player.incrementScore(tile.shape.size());  // Calcul du score
+        std::cout << "Appuyez sur 'R' pour pivoter, 'F' pour retourner ou 'P' pour placer : ";
+        std::cin >> action;
+
+        // Valide les actions reconnues
+        if (action == 'R' || action == 'r') {
+            tile.shape = tiles.rotateTile(tile.shape);
+            std::cout << "Tuile pivotée !" << std::endl;
+        } else if (action == 'F' || action == 'f') {
+            tile.shape = tiles.flipTile(tile.shape);
+            std::cout << "Tuile retournée !" << std::endl;
+        } else if (action == 'P' || action == 'p') {
+            int x, y;
+            std::cout << "Entrez les coordonnées pour placer la tuile (x y) : ";
+            std::cin >> x >> y;
+
+            if (board.canPlaceTile(x, y, tile.shape, player.getSymbol())) {
+                board.placeTile(x, y, tile.shape, player.getSymbol());
+                player.incrementScore(tile.shape.size());
+                placing = true;
+            } else {
+                std::cout << "Placement invalide : la tuile touche les cases d'un autre joueur ou dépasse la grille.\n";
+            }
+        } else {
+            std::cout << "Action non reconnue. Essayez encore.\n";
+        }
+    } while (!placing);
+
 
     // Affiche la grille mise à jour
     std::cout << "Plateau mis à jour :" << std::endl;
     board.display();
 }
+
 

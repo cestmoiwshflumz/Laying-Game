@@ -43,3 +43,31 @@ const Tile& Tiles::getTile(int index) const {
 int Tiles::getTotalTiles() const {
     return tiles.size();
 }
+
+std::vector<std::vector<int>> Tiles::rotateTile(const std::vector<std::vector<int>>& tileShape) {
+    int rows = tileShape.size();
+    int cols = tileShape[0].size();
+    std::vector<std::vector<int>> rotated(cols, std::vector<int>(rows, 0));
+
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
+            rotated[j][rows - 1 - i] = tileShape[i][j];
+        }
+    }
+    return rotated;
+}
+
+std::vector<std::vector<int>> Tiles::flipTile(const std::vector<std::vector<int>>& tileShape) {
+    std::vector<std::vector<int>> flipped = tileShape;
+
+    // Parcourt chaque ligne et inverse ses colonnes
+    for (auto& row : flipped) {
+        std::reverse(row.begin(), row.end());
+    }
+
+    return flipped;
+}
+
+
+
+
