@@ -74,7 +74,7 @@ void Game::takeTurn(Player& player) {
         } else if (action == 'P' || action == 'p') {
             int x, y;
             std::cout << "Entrez les coordonnées pour placer la tuile (x y) : ";
-            std::cin >> x >> y;
+            std::cin >> y >> x;
 
             if (board.canPlaceTile(x, y, tile.shape, player.getSymbol())) {
                 board.placeTile(x, y, tile.shape, player.getSymbol());
