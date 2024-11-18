@@ -8,22 +8,30 @@ Board::Board(int numPlayers) {
 }
 
 void Board::display() const {
-    // Affiche les indices horizontaux
+    // Affiche les numéros des colonnes
     std::cout << "   ";
     for (int col = 0; col < size; ++col) {
-        std::cout << (col % 10) << ' ';  // Affiche les numéros de colonne
+        if (col < 10)
+            std::cout << " " << col << " ";
+        else
+            std::cout << col << " ";
     }
-    std::cout << '\n';
+    std::cout << "\n";
 
-    // Affiche les lignes de la grille avec indices
+    // Affiche les lignes avec leurs numéros
     for (int row = 0; row < size; ++row) {
-        std::cout << (row % 10) << "  ";  // Affiche le numéro de la ligne
-        for (char cell : grid[row]) {
-            std::cout << cell << ' ';
+        if (row < 10)
+            std::cout << " " << row << " "; // Numéros de lignes avec un espace supplémentaire
+        else
+            std::cout << row << " ";       // Numéros de lignes pour 10+
+
+        for (int col = 0; col < size; ++col) {
+            std::cout << " " << grid[row][col] << " ";
         }
-        std::cout << '\n';
+        std::cout << "\n";
     }
 }
+
 
 bool Board::canPlaceTile(int x, int y, const std::vector<std::vector<int>>& tileShape, char playerSymbol) {
     int tileHeight = tileShape.size();
@@ -124,7 +132,40 @@ void Board::initializeStartingPoints(int numPlayers) {
                   << ": (" << startingPoints[i].first << ", " << startingPoints[i].second << ")\n";
     }
 }
+/*
+int Board::calculateLargestSquare(char playerSymbol) {
+    int maxSize = 0;
+    std::vector<std::vector<int>> dp(size, std::vector<int>(size, 0));
 
+    for (int i = 0; i < size; ++i) {
+        for (int j = 0; j < size; ++j) {
+            if (grid[i][j] == playerSymbol) {
+                if (i == 0 || j == 0) {
+                    dp[i][j] = 1; // Bord de la grille
+                } else {
+                    dp[i][j] = std::min({dp[i-1][j], dp[i][j-1], dp[i-1][j-1]}) + 1;
+                }
+                maxSize = std::max(maxSize, dp[i][j]);
+            }
+        }
+    }
 
+    return maxSize * maxSize; // Retourne la taille du plus grand carré
+}
+
+int Board::calculateTotalTiles(char playerSymbol) {
+    int total = 0;
+
+    for (int i = 0; i < size; ++i) {
+        for (int j = 0; j < size; ++j) {
+            if (grid[i][j] == playerSymbol) {
+                ++total;
+            }
+        }
+    }
+
+    return total; // Retourne le nombre total de cases occupées
+}
+*/
 
 

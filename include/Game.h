@@ -10,6 +10,7 @@ class Game {
 public:
     Game(int numPlayers, const std::string& tileFile); // Initialiser le jeu
     void start();  // Démarrer le jeu
+    void endGame();
 
 private:
     Board board;                // Plateau de jeu

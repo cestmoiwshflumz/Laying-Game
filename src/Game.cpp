@@ -31,12 +31,8 @@ void Game::start() {
             takeTurn(player);
         }
     }
-
     // Fin du jeu
-    std::cout << "Fin du jeu !" << std::endl;
-    for (const auto& player : players) {
-        std::cout << player.getName() << " - Score : " << player.getScore() << "\n";
-    }
+    endGame();
 }
 
 
@@ -92,6 +88,33 @@ void Game::takeTurn(Player& player) {
     // Affiche la grille mise à jour
     std::cout << "Plateau mis à jour :" << std::endl;
     board.display();
+}
+
+void Game::endGame() {
+    std::cout << "\n=== Fin du jeu ===\n";
+    std::cout << "Scores finaux :\n";
+
+    Player* winner = nullptr;
+    int highestScore = 0;
+    bool tie = false; // Indique s'il y a une égalité
+
+    for (const auto& player : players) {
+        std::cout << player.getName() << " - Score : " << player.getScore() << "\n";
+
+        if (player.getScore() > highestScore) {
+            highestScore = player.getScore();
+            winner = const_cast<Player*>(&player);
+            tie = false; // Réinitialise l'égalité
+        } else if (player.getScore() == highestScore) {
+            tie = true; // Égalité
+        }
+    }
+
+    if (tie) {
+        std::cout << "\nMatch nul ! Plusieurs joueurs ont le score le plus élevé : " << highestScore << "\n";
+    } else if (winner) {
+        std::cout << "\nLe gagnant est : " << winner->getName() << " avec un score de " << highestScore << " !\n";
+    }
 }
 
 

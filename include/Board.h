@@ -12,7 +12,8 @@ public:
     bool placeTile(int x, int y, const std::vector<std::vector<int>>& tileShape, char playerSymbol); // Place une tuile
     bool canPlaceTile(int x, int y, const std::vector<std::vector<int>>& tileShape, char playerSymbol); // Vérifie si une tuile peut être placée
     void initializeStartingPoints(int numPlayers);
-
+    int calculateLargestSquare(char playerSymbol);
+    int calculateTotalTiles(char playerSymbol);
 
 private:
     int size;  // Taille du plateau (20x20 ou 30x30)
