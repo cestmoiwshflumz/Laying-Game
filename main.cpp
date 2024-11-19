@@ -45,8 +45,19 @@ int main() {
     // Initialise la graine pour la génération aléatoire
     std::srand(std::time(nullptr));
 
-    // Crée une instance de jeu avec 2 joueurs et charge les tuiles depuis un fichier JSON
-    Game game(2, "../data/tiles.json");
+    // Demande à l'utilisateur d'entrer le nombre de joueurs
+    int numPlayers;
+    std::cout << "Entrez le nombre de joueurs (2 à 4) : ";
+    while (true) {
+        std::cin >> numPlayers;
+        if (numPlayers >= 2 && numPlayers <= 4) {
+            break;
+        }
+        std::cout << "Nombre de joueurs invalide. Veuillez entrer un nombre entre 2 et 4 : ";
+    }
+
+    // Crée une instance de jeu avec le nombre de joueurs choisi et charge les tuiles depuis un fichier JSON
+    Game game(numPlayers, "../data/tiles.json");
 
     // Démarre le jeu
     game.start();
