@@ -113,7 +113,7 @@ Le gagnant est : Player 2 avec un carré de 25 cases et un total de 40 cases !
 - Si vous rencontrez des problèmes, vérifiez les fichiers requis (tiles.json) et réessayez.
 
 ## Contributeurs
-Créé par Flumz.\
+Créé par Flumz. 
 
 Pour signaler des bugs ou proposer des améliorations, visitez le dépôt GitHub : \
 https://github.com/cestmoiwshflumz/Laying-Game
