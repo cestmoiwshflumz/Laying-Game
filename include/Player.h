@@ -3,19 +3,47 @@
 
 #include <string>
 
+/**
+ * @class Player
+ * @brief Représente un joueur dans le jeu.
+ */
 class Player {
 public:
-    Player(const std::string& name, char symbol); // Constructeur
+    /**
+     * @brief Constructeur pour initialiser un joueur avec son nom et son symbole.
+     * @param name Nom du joueur.
+     * @param symbol Symbole représentant le joueur (ex: 'A', 'B', ...).
+     */
+    Player(const std::string& name, char symbol);
 
-    const std::string& getName() const;  // Récupère le nom du joueur
-    char getSymbol() const;             // Récupère le symbole du joueur
-    int getScore() const;               // Récupère le score actuel
-    void incrementScore(int points);    // Augmente le score
+    /**
+     * @brief Récupère le nom du joueur.
+     * @return Le nom du joueur.
+     */
+    const std::string& getName() const;
+
+    /**
+     * @brief Récupère le symbole du joueur.
+     * @return Le symbole du joueur.
+     */
+    char getSymbol() const;
+
+    /**
+     * @brief Récupère le score actuel du joueur.
+     * @return Le score du joueur.
+     */
+    int getScore() const;
+
+    /**
+     * @brief Augmente le score du joueur.
+     * @param points Nombre de points à ajouter au score.
+     */
+    void incrementScore(int points);
 
 private:
-    std::string name;   // Nom du joueur
-    char symbol;        // Symbole représentant le joueur (ex: 'A', 'B', ...)
-    int score;          // Score du joueur
+    std::string name;   ///< Nom du joueur.
+    char symbol;        ///< Symbole représentant le joueur (ex: 'A', 'B', ...).
+    int score;          ///< Score actuel du joueur.
 };
 
 #endif // PLAYER_H

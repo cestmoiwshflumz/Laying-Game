@@ -2,9 +2,15 @@
 #include <iostream>
 #include <random>
 
+// Générateurs aléatoires
 std::random_device rd;  // Source de vraie randomisation (si disponible)
 std::mt19937 gen(rd()); // Générateur Mersenne Twister
 
+/**
+ * @brief Constructeur de la classe Game. Initialise le jeu avec un nombre de joueurs et un fichier de tuiles.
+ * @param numPlayers Nombre de joueurs dans la partie.
+ * @param tileFile Chemin vers le fichier contenant les tuiles.
+ */
 Game::Game(int numPlayers, const std::string& tileFile)
     : board(numPlayers), tiles(tileFile), currentPlayerIndex(0) {
     for (int i = 0; i < numPlayers; ++i) {
@@ -14,6 +20,9 @@ Game::Game(int numPlayers, const std::string& tileFile)
     }
 }
 
+/**
+ * @brief Démarre le jeu en initialisant le plateau et en lançant les tours.
+ */
 void Game::start() {
     std::cout << "Démarrage du jeu !" << std::endl;
 
@@ -24,34 +33,35 @@ void Game::start() {
     std::cout << "Plateau initial avec les points de départ :" << std::endl;
     board.display();
 
-    // 9 manches
+    // Boucle pour les 9 manches
     for (int round = 0; round < 9; ++round) {
         std::cout << "\n=== Tour " << (round + 1) << " ===\n";
 
         for (auto& player : players) {
-            takeTurn(player);
+            takeTurn(player); // Tour du joueur
         }
     }
 
-    // Appeler la fin du jeu
+    // Fin du jeu
     endGame();
 }
 
-
-
-
-
+/**
+ * @brief Effectue le tour d'un joueur.
+ * @param player Référence au joueur actif.
+ */
 void Game::takeTurn(Player& player) {
     std::cout << player.getName() << " (" << player.getSymbol() << "), c'est votre tour.\n";
 
-    // Génère un nombre aléatoire pour choisir une tuile
+    // Choisir une tuile aléatoire
     std::uniform_int_distribution<> dis(0, tiles.getTotalTiles() - 1);
-    Tile tile = tiles.getTile(dis(gen));  // Copie locale de la tuile pour permettre les modifications
+    Tile tile = tiles.getTile(dis(gen));  // Copie locale pour modification
 
     char action;
     bool placing = false;
 
     do {
+        // Affiche la tuile actuelle
         std::cout << "Forme actuelle de la tuile :" << std::endl;
         for (const auto& row : tile.shape) {
             for (int cell : row) {
@@ -63,7 +73,6 @@ void Game::takeTurn(Player& player) {
         std::cout << "Appuyez sur 'R' pour pivoter, 'F' pour retourner ou 'P' pour placer : ";
         std::cin >> action;
 
-        // Valide les actions reconnues
         if (action == 'R' || action == 'r') {
             tile.shape = tiles.rotateTile(tile.shape);
             std::cout << "Tuile pivotée !" << std::endl;
@@ -91,16 +100,18 @@ void Game::takeTurn(Player& player) {
     board.display();
 }
 
-
+/**
+ * @brief Termine le jeu en calculant les scores et en affichant le gagnant.
+ */
 void Game::endGame() {
     std::cout << "\n=== Fin du jeu ===\n";
 
     int highestScore = 0;
     int largestSquare = 0;
     Player* winner = nullptr;
-    bool tie = false; // Pour détecter une égalité
+    bool tie = false;
 
-    // Parcourir tous les joueurs pour calculer les scores
+    // Calculer les scores pour chaque joueur
     for (const auto& player : players) {
         int squareScore = board.calculateLargestSquare(player.getSymbol());
         int totalTiles = board.calculateTotalTiles(player.getSymbol());
@@ -108,19 +119,19 @@ void Game::endGame() {
         std::cout << player.getName() << " - Plus grand carré : " << squareScore
                   << " cases, Total de cases occupées : " << totalTiles << "\n";
 
-        // Comparer pour trouver le gagnant
+        // Déterminer le gagnant
         if (squareScore > largestSquare ||
            (squareScore == largestSquare && totalTiles > highestScore)) {
             largestSquare = squareScore;
             highestScore = totalTiles;
             winner = const_cast<Player*>(&player);
-            tie = false; // Réinitialise l'égalité
-           } else if (squareScore == largestSquare && totalTiles == highestScore) {
-               tie = true; // Égalité détectée
-           }
+            tie = false;
+        } else if (squareScore == largestSquare && totalTiles == highestScore) {
+            tie = true;
+        }
     }
 
-    // Afficher le résultat
+    // Afficher les résultats
     if (tie) {
         std::cout << "\nMatch nul ! Plusieurs joueurs ont atteint le score maximum.\n";
     } else if (winner) {
@@ -129,5 +140,3 @@ void Game::endGame() {
                   << " cases et un total de " << highestScore << " cases !\n";
     }
 }
-
-
