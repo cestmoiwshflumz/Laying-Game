@@ -1,4 +1,4 @@
-# **Laying Game - Documentation Utilisateur**
+# **Laying Gasse - Documentation Utilisateur**
 
 ## **Introduction**
 
