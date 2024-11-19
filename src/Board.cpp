@@ -38,8 +38,9 @@ bool Board::canPlaceTile(int x, int y, const std::vector<std::vector<int>>& tile
     int tileWidth = tileShape[0].size();
 
     // Vérifie que la tuile ne dépasse pas les limites de la grille
-    if (y + tileHeight > size || x + tileWidth > size) {
-        std::cout << "Erreur : La tuile dépasse les limites de la grille.\n";
+    if (x < 0 || y < 0 || x + tileHeight > size || y + tileWidth > size) {
+        std::cout << "Erreur : La tuile dépasse les limites de la grille. Dimensions de la grille : "
+                  << size << "x" << size << ", Position demandée : (" << x << ", " << y << ").\n";
         return false;
     }
 
@@ -132,7 +133,7 @@ void Board::initializeStartingPoints(int numPlayers) {
                   << ": (" << startingPoints[i].first << ", " << startingPoints[i].second << ")\n";
     }
 }
-/*
+
 int Board::calculateLargestSquare(char playerSymbol) {
     int maxSize = 0;
     std::vector<std::vector<int>> dp(size, std::vector<int>(size, 0));
@@ -143,7 +144,7 @@ int Board::calculateLargestSquare(char playerSymbol) {
                 if (i == 0 || j == 0) {
                     dp[i][j] = 1; // Bord de la grille
                 } else {
-                    dp[i][j] = std::min({dp[i-1][j], dp[i][j-1], dp[i-1][j-1]}) + 1;
+                    dp[i][j] = std::min(dp[i - 1][j], std::min(dp[i][j - 1], dp[i - 1][j - 1])) + 1;
                 }
                 maxSize = std::max(maxSize, dp[i][j]);
             }
@@ -152,6 +153,7 @@ int Board::calculateLargestSquare(char playerSymbol) {
 
     return maxSize * maxSize; // Retourne la taille du plus grand carré
 }
+
 
 int Board::calculateTotalTiles(char playerSymbol) {
     int total = 0;
@@ -166,6 +168,5 @@ int Board::calculateTotalTiles(char playerSymbol) {
 
     return total; // Retourne le nombre total de cases occupées
 }
-*/
 
 

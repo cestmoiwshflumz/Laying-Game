@@ -17,23 +17,26 @@ Game::Game(int numPlayers, const std::string& tileFile)
 void Game::start() {
     std::cout << "Démarrage du jeu !" << std::endl;
 
-    // Initialiser les points de départ pour les joueurs
+    // Initialiser les points de départ
     board.initializeStartingPoints(players.size());
 
-    // Affiche le plateau initial avec les points de départ
+    // Affiche le plateau initial
     std::cout << "Plateau initial avec les points de départ :" << std::endl;
     board.display();
 
-    // 9 tours de jeu
+    // 9 manches
     for (int round = 0; round < 9; ++round) {
-        std::cout << "=== Tour " << (round + 1) << " ===\n";
+        std::cout << "\n=== Tour " << (round + 1) << " ===\n";
+
         for (auto& player : players) {
             takeTurn(player);
         }
     }
-    // Fin du jeu
+
+    // Appeler la fin du jeu
     endGame();
 }
+
 
 
 
@@ -74,7 +77,6 @@ void Game::takeTurn(Player& player) {
 
             if (board.canPlaceTile(x, y, tile.shape, player.getSymbol())) {
                 board.placeTile(x, y, tile.shape, player.getSymbol());
-                player.incrementScore(tile.shape.size());
                 placing = true;
             } else {
                 std::cout << "Placement invalide : la tuile touche les cases d'un autre joueur ou dépasse la grille.\n";
@@ -84,36 +86,47 @@ void Game::takeTurn(Player& player) {
         }
     } while (!placing);
 
-
     // Affiche la grille mise à jour
     std::cout << "Plateau mis à jour :" << std::endl;
     board.display();
 }
 
+
 void Game::endGame() {
     std::cout << "\n=== Fin du jeu ===\n";
-    std::cout << "Scores finaux :\n";
 
-    Player* winner = nullptr;
     int highestScore = 0;
-    bool tie = false; // Indique s'il y a une égalité
+    int largestSquare = 0;
+    Player* winner = nullptr;
+    bool tie = false; // Pour détecter une égalité
 
+    // Parcourir tous les joueurs pour calculer les scores
     for (const auto& player : players) {
-        std::cout << player.getName() << " - Score : " << player.getScore() << "\n";
+        int squareScore = board.calculateLargestSquare(player.getSymbol());
+        int totalTiles = board.calculateTotalTiles(player.getSymbol());
 
-        if (player.getScore() > highestScore) {
-            highestScore = player.getScore();
+        std::cout << player.getName() << " - Plus grand carré : " << squareScore
+                  << " cases, Total de cases occupées : " << totalTiles << "\n";
+
+        // Comparer pour trouver le gagnant
+        if (squareScore > largestSquare ||
+           (squareScore == largestSquare && totalTiles > highestScore)) {
+            largestSquare = squareScore;
+            highestScore = totalTiles;
             winner = const_cast<Player*>(&player);
             tie = false; // Réinitialise l'égalité
-        } else if (player.getScore() == highestScore) {
-            tie = true; // Égalité
-        }
+           } else if (squareScore == largestSquare && totalTiles == highestScore) {
+               tie = true; // Égalité détectée
+           }
     }
 
+    // Afficher le résultat
     if (tie) {
-        std::cout << "\nMatch nul ! Plusieurs joueurs ont le score le plus élevé : " << highestScore << "\n";
+        std::cout << "\nMatch nul ! Plusieurs joueurs ont atteint le score maximum.\n";
     } else if (winner) {
-        std::cout << "\nLe gagnant est : " << winner->getName() << " avec un score de " << highestScore << " !\n";
+        std::cout << "\nLe gagnant est : " << winner->getName()
+                  << " avec un carré de " << largestSquare
+                  << " cases et un total de " << highestScore << " cases !\n";
     }
 }
 
