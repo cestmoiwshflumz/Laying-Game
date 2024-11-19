@@ -47,10 +47,10 @@ int main() {
 
     // Demande à l'utilisateur d'entrer le nombre de joueurs
     int numPlayers;
-    std::cout << "Entrez le nombre de joueurs (2 à 4) : ";
+    std::cout << "Entrez le nombre de joueurs (2 à 9) : ";
     while (true) {
         std::cin >> numPlayers;
-        if (numPlayers >= 2 && numPlayers <= 4) {
+        if (numPlayers >= 2 && numPlayers <= 9) {
             break;
         }
         std::cout << "Nombre de joueurs invalide. Veuillez entrer un nombre entre 2 et 4 : ";

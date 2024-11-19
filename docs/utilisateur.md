@@ -1,8 +1,8 @@
-# **Laying Gasse - Documentation Utilisateur**
+# **Laying Gass - Documentation Utilisateur**
 
 ## **Introduction**
 
-Bienvenue dans **Laying Game**, un jeu stratégique où les joueurs placent des tuiles sur un plateau pour former le plus grand carré possible ou occuper un maximum de cases. Ce jeu, conçu pour 2 à 4 joueurs, se déroule en 9 tours. Le joueur avec le score le plus élevé à la fin de la partie remporte la victoire.
+Bienvenue dans **Laying Gass**, un jeu stratégique où les joueurs placent des tuiles sur un plateau pour former le plus grand carré possible ou occuper un maximum de cases. Ce jeu, conçu pour 2 à 4 joueurs, se déroule en 9 tours. Le joueur avec le score le plus élevé à la fin de la partie remporte la victoire.
 
 ---
 
@@ -12,7 +12,7 @@ Bienvenue dans **Laying Game**, un jeu stratégique où les joueurs placent des 
 - **Système** : Windows.
 - **Environnement** : Console prenant en charge UTF-8.
 - **Fichiers nécessaires** :
-    - L'exécutable du jeu (`LayingGame.exe`).
+    - L'exécutable du jeu (`Laying_Gass.exe`).
     - Le fichier `tiles.json` contenant les tuiles.
 
 ### **Instructions d'installation**
@@ -116,7 +116,7 @@ Le gagnant est : Player 2 avec un carré de 25 cases et un total de 40 cases !
 Créé par Flumz. 
 
 Pour signaler des bugs ou proposer des améliorations, visitez le dépôt GitHub : \
-https://github.com/cestmoiwshflumz/Laying-Gasse
+https://github.com/cestmoiwshflumz/Laying-Gass
 
 
 
